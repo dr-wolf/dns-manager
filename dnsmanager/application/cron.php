@@ -21,7 +21,7 @@
 
     );
 
-    echo Core::cron($config, 'Cron');
+    echo Core::cron($config, 'CronTask');
 
 
 

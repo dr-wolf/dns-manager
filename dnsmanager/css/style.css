@@ -1,0 +1,118 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    font-family: monospace;
+}
+
+a { 
+    color: #004080;
+    text-decoration: none;  
+}
+
+a.button:before {
+    content: "[";
+}
+
+a.button:after {
+    content: "]";
+}
+
+a:hover {
+    color: #0080f0;
+    text-decoration: underline;  
+}
+
+.page {
+    width: 1000px;
+    margin: 10px auto;
+    border: 1px solid #004080;
+}
+
+.header {
+    background-color: #d0e0ff;
+    font-size: 32px;
+    padding: 20px;
+    border-bottom: 1px solid #004080;
+}
+
+.header .info {
+    font-size: 12px;
+    text-align: right;
+    height: 12px;
+    margin-top: -12px;
+}
+
+.menu {
+    background-color: #b0d0ff;
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #004080; 
+}
+
+.content {    
+    padding: 20px;
+}
+
+.footer {
+    background-color: #d0e0ff;
+    font-size: 12px;
+    padding: 10px; 
+    text-align: right;
+    border-top: 1px solid #004080;    
+}
+
+table {
+    width: 100%;
+    border: 1px solid #004080;
+    border-collapse: collapse;
+}
+
+table thead {
+    font-weight: bold;
+    background-color: #d0e0ff;
+}
+
+table td {
+    border: 1px solid #004080; 
+    padding: 4px;
+}
+
+table td.button-column {
+    width: 10%;
+    text-align: center; 
+}
+
+ul {
+    margin-left: 40px;
+}
+
+form div.col {
+    display: inline-block;
+    width: 40%;
+    padding: 5px 10px;
+    margin: auto;
+}
+
+form div.row {
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+    padding: 10px 0px;
+}
+
+form div.label {
+    text-align: right;
+}
+
+form div.error {
+    color: #ff0000;
+    padding: 10px;
+    text-align: center;
+    height: 20px;
+}
+
+form input[type="submit"] {
+    background-color: #c0e0f0;
+    padding: 5px;
+    border: 1px solid #000000;
+}

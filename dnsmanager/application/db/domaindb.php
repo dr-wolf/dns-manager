@@ -1,6 +1,4 @@
 <?php
-    define('RX_SUB', '[a-z0-9]+[a-z0-9\-]*[a-z0-9]');
-    define('RX_END', '[a-z0-9]{2,6}');
     
     /*
     * written by Taras "Dr.Wolf" Supyk <w@enigma-lab.org>    
@@ -63,7 +61,7 @@
         {
             if(!filter_var($domain['ip'], FILTER_VALIDATE_IP))
                 return "Invalid IP!";
-            if(!preg_match('/^'.RX_SUB.'(\.'.RX_SUB.')*\.'.RX_END.'$/ix', $domain['name']))
+            if(!preg_match('/^[a-z0-9]+[a-z0-9\-]*[a-z0-9]+(\.[a-z0-9]+[a-z0-9\-]*[a-z0-9]+)*\.[a-z0-9]{2,6}$/ix', $domain['name']))
                 return "Invalid domain name!";        
             $sql = 'select count(*) as c from `domains` where `id` <> ? and `name` = ?';  
             $params = array($domain['id'], $domain['name']);

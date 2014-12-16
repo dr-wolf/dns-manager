@@ -1,7 +1,4 @@
 <?php
-    define('RX_SUB', '[a-z0-9]+[a-z0-9\-]*[a-z0-9]');
-    define('RX_END', '[a-z0-9]{2,6}');
-
     /*
     * written by Taras "Dr.Wolf" Supyk <w@enigma-lab.org>    
     * © ENIGMA Development Laboratory, 2014
@@ -59,7 +56,7 @@
 
         public static function validate($record)
         {
-            if(!preg_match('/^'.RX_SUB.'(\.'.RX_SUB.')*$/ix', $record['name']))
+            if(!preg_match('/^[a-z0-9]+[a-z0-9\-]*[a-z0-9]+(\.[a-z0-9]+[a-z0-9\-]*[a-z0-9]+)*$/ix', $record['name']))
             return "Invalid record name!";
             switch(intval($record['type'])){
                 case 0:
@@ -67,7 +64,7 @@
                         return "Invalid target, must be IP!";
                     break;
                 case 1:
-                    if(!preg_match('/^'.RX_SUB.'(\.'.RX_SUB.')*\.'.RX_END.'$/ix', $record['target']) && $record['target'] != '@')
+                    if(!preg_match('/^[a-z0-9]+[a-z0-9\-]*[a-z0-9]+(\.[a-z0-9]+[a-z0-9\-]*[a-z0-9]+)*\.[a-z0-9]{2,6}$/ix', $record['target']) && $record['target'] != '@')
                         return "Invalid target, must be domain!";
                     break;
                 default:

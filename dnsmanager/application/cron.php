@@ -3,6 +3,8 @@
     require_once(__DIR__."/core/core.php");
 
     $config = array(
+    
+        'application' => __DIR__.'/',
 
         'db' => array(
             'host' => 'localhost',

@@ -31,7 +31,7 @@
         static public function processqueue()
         {    
             $log = self::cleardb();
-            $domains = DomainDB::all(true);
+            $domains = DomainDB::all(null, true);
             if(count($domains) || $log != ''){
                 foreach($domains as $domain){
                     file_put_contents(self::$config['db_path'].'db.'.sprintf('%06d', $domain['id']), self::writedb($domain));

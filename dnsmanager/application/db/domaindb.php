@@ -7,11 +7,13 @@
     
     class DomainDB extends DB {
 
-        public static function all($modified = false)
+        public static function all($order = null, $modified = false)
         {
             $sql = 'select * from `domains`'; 
             if($modified)
-                $sql .= ' where `modified` = true';                   
+                $sql .= ' where `modified` = true';  
+            if(in_array($order, array('id', 'name', 'ip', 'modified')))
+                $sql .= ' order by `'.$order.'` asc';                 
             return self::$db->query($sql, array())->fetchAll();    
         }
 

@@ -48,6 +48,16 @@
             echo '<h1>404: Not Found</h1>';
             die();
         }
+        
+        static public function request($value, $default = null){
+            if(isset($_REQUEST[$value])) {
+                $value = $_REQUEST[$value];
+                if($default !== null)
+                    settype($value, gettype($default));
+                return $value;
+            } else
+                return $default;
+        }
 
         static public function run($config)
         {

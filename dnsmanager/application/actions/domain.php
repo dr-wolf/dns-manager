@@ -9,50 +9,41 @@
 
         static public function domains()
         {           
-            $domains = DomainDB::all();
+            $domains = DomainDB::all(self::request('order', 'id'));
             return self::render('domains', array('domains' => $domains));
         }
 
         static public function urltree()
         {           
-            function cmp($a, $b){
-                if ($a['name'] == $b['name']) 
-                    return 0;
-                return ($a['name'] < $b['name']) ? -1 : 1;
-            }
-
-            $domains = DomainDB::all();
-            usort($domains, 'cmp');
+            $domains = DomainDB::all('name');
             foreach($domains as $key => $domain){
-                $records = RecordDB::all($domain['id']);
-                if(count($records)){
-                    usort($records, 'cmp');
-                    $domains[$key]['records'] = $records;
-                }    
+                $records = RecordDB::all($domain['id'], 'name');
+                if(count($records))
+                    $domains[$key]['records'] = $records;  
             }
             return self::render('urltree', array('domains' => $domains));
         }
 
         static public function view()
         {           
-            $domain = DomainDB::get(intval($_GET['id']));
-            $records = RecordDB::all($domain['id']);
+            $domain = DomainDB::get(self::request('id', 0));
+            $records = RecordDB::all($domain['id'], self::request('order', 'name'));
             return self::render('view', array('domain' => $domain, 'records' => $records));
         }        
 
         static public function raw()
         {           
             header('Content-type: text/plain');
-            $domain = DomainDB::get(intval($_GET['id']));
-            echo Cron::writedb($domain);
+            $domain = DomainDB::get(self::request('id'), 0);
+            echo CronTask::writedb($domain);
             die();
         } 
 
         static public function add()
         {
             $error = '';
-            if(isset($_POST['domain'])){
-                $domain = $_POST['domain'];      
+            $domain = self::request('domain');
+            if($domain != null){   
                 $error = DomainDB::validate($domain);
                 if($error == ''){
                     DomainDB::insert($domain);
@@ -70,22 +61,23 @@
         static public function edit()
         {
             $error = '';
-            if(isset($_POST['domain'])){
-                $domain = $_POST['domain'];      
+            $domain = self::request('domain');
+            if($domain != null){      
                 $error = DomainDB::validate($domain);
                 if($error == ''){
                     DomainDB::update($domain);
                     self::redirect('/');    
                 }
             } else
-                $domain = DomainDB::get(intval($_GET['id']));
+                $domain = DomainDB::get(intval(self::request('id')));
             return self::render('forms/domain', array('domain' => $domain, 'error' => $error));
         }
 
         static public function delete()
         {
-            if(isset($_GET['id']))
-                DomainDB::delete(intval($_GET['id']));           
+            $id = self::request('id', 0);
+            if($id > 0)
+                DomainDB::delete($id);           
             self::redirect('/');
         }
     }

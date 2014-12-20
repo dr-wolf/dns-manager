@@ -111,8 +111,13 @@ form div.error {
     height: 20px;
 }
 
+form input, form select {
+    padding: 2px;
+    border: 1px solid #000080;   
+}
+
 form input[type="submit"] {
+    width: auto;
+    padding: 5px 10px;
     background-color: #c0e0f0;
-    padding: 5px;
-    border: 1px solid #000000;
 }

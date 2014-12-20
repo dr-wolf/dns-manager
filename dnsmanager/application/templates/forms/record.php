@@ -22,7 +22,7 @@
     </div>
     <input type="hidden" name="record[domain_id]" value="<?=$record['domain_id']?>">
     <input type="hidden" name="record[id]" value="<?=$record['id']?>">
-    <div class="row"><input type="submit"></div> 
+    <div class="row"><input type="submit" value="Send"></div> 
     <div class="error"><?=$error?></div>
 </form>
 

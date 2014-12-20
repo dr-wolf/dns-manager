@@ -9,8 +9,8 @@
         static public function add()
         {
             $error = '';
-            if(isset($_POST['record'])){
-                $record = $_POST['record'];      
+            $record = self::request('record'); 
+            if($record != null){
                 $error = RecordDB::validate($record);                
                 if($error == ''){
                     RecordDB::insert($record);
@@ -22,7 +22,7 @@
                     'name' => '',
                     'type' => 0,
                     'target' => '@',
-                    'domain_id' => intval($_GET['domain'])                    
+                    'domain_id' => self::request('domain', 0)                    
                 );
             return self::render('forms/record', array('record' => $record, 'error' => $error));
         }
@@ -30,24 +30,23 @@
         static public function edit()
         {
             $error = '';
-            if(isset($_POST['record'])){
-                $record = $_POST['record'];      
+            $record = self::request('record'); 
+            if($record != null){ 
                 $error = RecordDB::validate($record);
                 if($error == ''){
                     RecordDB::update($record);
                     self::redirect('/domain?id='.$record['domain_id']);    
                 }
             } else
-                $record = RecordDB::get(intval($_GET['id']));
+                $record = RecordDB::get(self::request('id', 0));
             return self::render('forms/record', array('record' => $record, 'error' => $error));
         }
 
         static public function delete()
         {
-            if(isset($_GET['id'])) {
-                $record = RecordDB::get(intval($_GET['id']));
-                RecordDB::delete($record);  
-            }     
-            self::redirect('/domain?id='.intval($_GET['domain']));
+            $id = self::request('id', 0);
+            if($id > 0) 
+                RecordDB::delete(RecordDB::get($id));     
+            self::redirect('/domain?id='.self::request('domain', 0));
         }
 }

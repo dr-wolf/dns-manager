@@ -1,4 +1,5 @@
 <?php
+  
     require_once(__DIR__.'/application/core/core.php');
 
     $config = array(
@@ -8,7 +9,7 @@
     
         'db' => array(
             'host' => 'localhost', 
-            'user' => 'user',       
+            'user' => 'user',
             'password' => 'password', 
             'database' => 'database'
         ),

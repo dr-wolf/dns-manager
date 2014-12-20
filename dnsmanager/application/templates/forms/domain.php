@@ -8,7 +8,7 @@
         <div class="col"><input type="text" name="domain[ip]" value="<?=$domain['ip']?>" /></div>
     </div>
     <input type="hidden" name="domain[id]" value="<?=$domain['id']?>">
-    <div class="row"><input type="submit"></div> 
+    <div class="row"><input type="submit" value="Send"></div> 
     <div class="error"><?=$error?></div>
 </form>
 

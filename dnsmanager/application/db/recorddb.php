@@ -8,9 +8,11 @@
 
         public static $types = array('A', 'CNAME');
 
-        public static function all($domain_id)
+        public static function all($domain_id, $order = null)
         {
-            $sql = 'select * from `records` where `domain_id` = ? order by `type`, `name`';                    
+            $sql = 'select * from `records` where `domain_id` = ?'; 
+            if(in_array($order, array('name', 'target', 'type')))
+                $sql .= ' order by `'.$order.'` asc';                   
             $params = array($domain_id);
             return self::$db->query($sql, $params)->fetchAll();    
         }

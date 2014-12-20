@@ -8,9 +8,9 @@
 <table border=1>
     <thead>
         <tr>
-            <td>Name</td>
-            <td>Type</td>
-            <td>Target</td>
+            <td><a href="/domain?id=<?=$domain['id']?>&order=name">Name</a></td>
+            <td><a href="/domain?id=<?=$domain['id']?>&order=type">Type</a></td>
+            <td><a href="/domain?id=<?=$domain['id']?>&order=target">Target</a></td>
             <td class="button-column"></td>
             <td class="button-column"></td>
         </tr>

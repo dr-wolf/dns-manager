@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
     <head>
-        <title><?=$title?></title>
+        <title><?=self::$title?></title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link rel="stylesheet" type="text/css" href="/css/style.css" />
     </head>
@@ -9,7 +9,7 @@
         <div class="page">
             <div class="header">
                 <div class="info">Cron timeout: <?=date("i:s", 300 - (time() % 300))?></div>
-                <?=$title?>
+                <?=self::$title?>
             </div>
             <div class="menu">
                 <a class="button" href="/">DOMAINS</a> ::

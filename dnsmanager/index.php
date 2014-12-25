@@ -1,38 +1,11 @@
 <?php
-  
-    require_once(__DIR__.'/application/core/core.php');
+    ini_set('display_errors', 1);
+    error_reporting(E_ALL);
 
-    $config = array(
-    
-        'application' => __DIR__.'/application/',
-        'layout' => 'layout',
-    
-        'db' => array(
-            'host' => 'localhost', 
-            'user' => 'user',
-            'password' => 'password', 
-            'database' => 'database'
-        ),
+    define('APP_PATH', __DIR__.'/application/');
 
-        'routes' => array(
-            '/' => 'Domain.domains',
-            '/urls' => 'Domain.urltree',
-            '/domain' => 'Domain.view',
-            '/domain/zone' => 'Domain.raw',
-            '/add' => 'Domain.add',
-            '/edit' => 'Domain.edit',
-            '/delete' => 'Domain.delete',
-            '/record/add' => 'Record.add',
-            '/record/edit' => 'Record.edit',
-            '/record/delete' => 'Record.delete'
-        ),
-        
-        'names' => array(
-            'nameserver' => 'example.com',
-            'nameserver_ip' => '192.168.0.1'
-        )
-        
-    );
+    require_once(__DIR__.'/application/framework/core.php');
+    require_once(__DIR__.'/application/config.php');
 
     echo Core::run($config);
 

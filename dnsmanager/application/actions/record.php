@@ -4,7 +4,7 @@
     * © ENIGMA Development Laboratory, 2014
     */
 
-    class Record extends Core
+    class Record extends BaseController
     {
         static public function add()
         {

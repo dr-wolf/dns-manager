@@ -4,12 +4,15 @@
     * © ENIGMA Development Laboratory, 2014
     */
 
-    class Domain extends Core 
+    class Domain extends BaseController 
     {
-
+        
         static public function domains()
         {           
             $domains = DomainDB::all(self::request('order', 'id'));
+           
+            Core::cookie()->set('test', 1);
+           
             return self::render('domains', array('domains' => $domains));
         }
 

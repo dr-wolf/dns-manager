@@ -1,5 +1,4 @@
 <?php
-    require_once(__DIR__."/mysqli.php");
 
     /*
     * written by Taras "Dr.Wolf" Supyk <w@enigma-lab.org>    

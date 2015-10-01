@@ -14,7 +14,7 @@
                 $error = RecordDB::validate($record);                
                 if($error == ''){
                     RecordDB::insert($record);
-                    self::redirect('/domain?id='.$record['domain_id']);    
+                    self::redirect('/'.$record['domain_id']);    
                 }
             } else
                 $record = array(
@@ -22,7 +22,7 @@
                     'name' => '',
                     'type' => 0,
                     'target' => '@',
-                    'domain_id' => self::request('domain', 0)                    
+                    'domain_id' => self::request('d', 0)                    
                 );
             return self::render('forms/record', array('record' => $record, 'error' => $error));
         }
@@ -35,7 +35,7 @@
                 $error = RecordDB::validate($record);
                 if($error == ''){
                     RecordDB::update($record);
-                    self::redirect('/domain?id='.$record['domain_id']);    
+                    self::redirect('/'.$record['domain_id']);    
                 }
             } else
                 $record = RecordDB::get(self::request('id', 0));
@@ -47,6 +47,6 @@
             $id = self::request('id', 0);
             if($id > 0) 
                 RecordDB::delete(RecordDB::get($id));     
-            self::redirect('/domain?id='.self::request('domain', 0));
+            self::redirect('/'.self::request('d', 0));
         }
 }

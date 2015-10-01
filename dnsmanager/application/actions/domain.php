@@ -6,13 +6,10 @@
 
     class Domain extends BaseController 
     {
-        
+
         static public function domains()
-        {           
-            $domains = DomainDB::all(self::request('order', 'id'));
-           
-            Core::cookie()->set('test', 1);
-           
+        {                                            
+            $domains = DomainDB::all(self::request('order', 'id'));                                   
             return self::render('domains', array('domains' => $domains));
         }
 
@@ -28,18 +25,18 @@
         }
 
         static public function view()
-        {           
+        {                    
             $domain = DomainDB::get(self::request('id', 0));
             $records = RecordDB::all($domain['id'], self::request('order', 'name'));
-            return self::render('view', array('domain' => $domain, 'records' => $records));
+            $users = UserDB::all($domain['id']);
+            return self::render('view', array('domain' => $domain, 'records' => $records, 'users' => $users));
         }        
 
         static public function raw()
-        {           
-            header('Content-type: text/plain');
+        {                      
             $domain = DomainDB::get(self::request('id'), 0);
-            echo CronTask::writedb($domain);
-            die();
+            header('Content-type: text/plain');
+            return CronTask::writedb($domain);
         } 
 
         static public function add()
@@ -56,7 +53,8 @@
                 $domain = array(
                     'id' => 0,
                     'name' => '',
-                    'ip' => ''                    
+                    'ip' => '',
+                    'mailserver' => 0                    
                 );
             return self::render('forms/domain', array('domain' => $domain, 'error' => $error));
         }
@@ -69,7 +67,7 @@
                 $error = DomainDB::validate($domain);
                 if($error == ''){
                     DomainDB::update($domain);
-                    self::redirect('/');    
+                    self::redirect('/'.$domain['id']);    
                 }
             } else
                 $domain = DomainDB::get(intval(self::request('id')));

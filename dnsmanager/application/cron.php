@@ -2,10 +2,9 @@
 <?php
     define('APP_PATH', __DIR__.'/');
 
-    require_once(__DIR__."/framework/core.php");
-    require_once(__DIR__."/config.php");
+    require_once('/home/www-data/frameworks/mosquito/core.php');
 
-    echo Core::cron($config, 'CronTask');
+    echo Core::cron('CronTask');
 
 
 

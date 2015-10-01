@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+2015-01-30
+  + added e-mail accounts and aliases, which can be used for autocofiguring mail daemons
+  * major changes to framework
+  * config file is now stored as JSON
+  
+  
+
 2014-12-25
 	* major changes to framework
 

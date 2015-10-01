@@ -7,7 +7,7 @@
     class BaseController extends Controller 
     {
 
-        static public function before()
+        static public function init()
         {
             self::$title = 'DNS Manager';
         }

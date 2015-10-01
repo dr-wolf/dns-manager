@@ -3,11 +3,11 @@
     error_reporting(E_ALL);
 
     define('APP_PATH', __DIR__.'/application/');
+    define('FRAMEWORK_PATH', __DIR__.'/application/framework/');
 
-    require_once(__DIR__.'/application/framework/core.php');
-    require_once(__DIR__.'/application/config.php');
+    require_once(FRAMEWORK_PATH.'core.php');
 
-    echo Core::run($config);
+    echo Core::run();
 
 
 

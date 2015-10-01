@@ -25,7 +25,7 @@
         static public function writedb($domain)
         {
             $records = RecordDB::all($domain['id']);
-            return self::render('files/db', array('domain' => $domain, 'records' => $records, 'names' => Core::$config['names']));             
+            return self::render('files/db', array('domain' => $domain, 'records' => $records, 'names' => Core::$config['names']), true);             
         }
 
         static public function processqueue()
@@ -38,7 +38,7 @@
                     $log .= '[info]: '.$domain['name'].' updated'.PHP_EOL;
                 }        
                 $domains = DomainDB::all();
-                file_put_contents(Core::$config['zone_file'], self::render('files/zone', array('domains' => $domains, 'path' => Core::$config['db_path'])));  
+                file_put_contents(Core::$config['zone_file'], self::render('files/zone', array('domains' => $domains, 'path' => Core::$config['db_path']), true));  
                 DomainDB::saveall();
                 shell_exec('service bind9 restart');
             } else 

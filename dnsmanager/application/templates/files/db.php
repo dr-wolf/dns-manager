@@ -14,6 +14,10 @@ $TTL    86400
 
 ns      IN      A       <?=$names['nameserver_ip']?>
 
+<?if($domain['mailserver']):?>
+mail    IN      A       <?=$names['nameserver_ip']?>
+<?endif?>
+
 ;
 www     IN      CNAME   @
 <?foreach($records as $record):?>

@@ -1,7 +1,7 @@
 <?php
     /*
     * written by Taras "Dr.Wolf" Supyk <w@enigma-lab.org>    
-    * © ENIGMA Development Laboratory, 2014
+    * ? ENIGMA Development Laboratory, 2014
     */    
     
     class RecordDB extends DB {
@@ -13,47 +13,40 @@
             $sql = 'select * from `records` where `domain_id` = ?'; 
             if(in_array($order, array('name', 'target', 'type')))
                 $sql .= ' order by `'.$order.'` asc';                   
-            $params = array($domain_id);
-            return self::$db->query($sql, $params)->fetchAll();    
+            return self::$db->query($sql, array($domain_id))->fetchAll();    
         }
 
         public static function get($id)
         {
-            $sql = 'select * from `records` where `id` = ? order by `type`, `name`';                    
-            $params = array($id);
-            return self::$db->query($sql, $params)->fetch(); 
+            $sql = 'select * from `records` where `id` = ?';                    
+            return self::$db->query($sql, array($id))->fetch(); 
         }
 
         public static function insert($record)
         {
             $sql = 'insert into `records` (`name`, `type`, `target`, `domain_id`) values (?, ?, ?, ?)';
-            unset($record['id']);
-            if(self::$db->query($sql, $record)->affectedRows())
+            if(self::$db->query($sql, self::prepare($record, array('name', 'type', 'target', 'domain_id')))->affectedRows())
                 DomainDB::modify($record['domain_id']);   
         }
 
         public static function update($record)
         {
             $sql = 'update `records` set `name` = ?, `type` = ?, `target` = ? where `id` = ?';
-            $domain_id = $record['domain_id']; 
-            unset($record['domain_id']);
-            if(self::$db->query($sql, $record)->affectedRows()) 
-                DomainDB::modify($domain_id);     
+            if(self::$db->query($sql, self::prepare('name', 'type', 'target', 'id'))->affectedRows()) 
+                DomainDB::modify($record['domain_id']);     
         }
 
         public static function delete($record)
         {
             $sql = 'delete from `records` where `id` = ?';
-            $params = array($record['id']);
-            if(self::$db->query($sql, $params)->affectedRows()) 
+            if(self::$db->query($sql, array($record['id']))->affectedRows()) 
                 DomainDB::modify($record['domain_id']);  
         }
 
         public static function clear($domain_id)
         {
             $sql = 'delete from `records` where `domain_id` = ?';
-            $params = array($domain_id);
-            self::$db->query($sql, $params);          
+            self::$db->query($sql, array($domain_id));          
         }
 
         public static function validate($record)

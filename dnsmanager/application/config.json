@@ -1,0 +1,40 @@
+{
+    "title": "DNS Manager",
+
+    "debug": true,
+
+    "db": {
+        "host": "localhost",
+        "user": "dnscontrol_user",
+        "password": "password",
+        "database": "dnscontrol_db"
+    },
+    
+    "routes": {
+        "/": "Domain.domains",
+        "/urls": "Domain.urltree",
+        "/aliases": "Alias.aliases",
+        "/aliases/add": "Alias.add",
+        "/aliases/{id:[0-9]+}/edit": "Alias.edit",
+        "/aliases/{id:[0-9]+}/delete": "Alias.delete",
+        "/{id:[0-9]+}": "Domain.view",
+        "/{id:[0-9]+}/raw": "Domain.raw",
+        "/add": "Domain.add",
+        "/{id:[0-9]+}/edit": "Domain.edit",
+        "/{id:[0-9]+}/delete": "Domain.delete",   
+        "/{d:[0-9]+}/addrec": "Record.add",
+        "/{d:[0-9]+}/{id:[0-9]+}/editrec": "Record.edit",
+        "/{d:[0-9]+}/{id:[0-9]+}/deleterec": "Record.delete",
+        "/{d:[0-9]+}/adduser": "User.add",
+        "/{d:[0-9]+}/{id:[0-9]+}/edituser": "User.edit",
+        "/{d:[0-9]+}/{id:[0-9]+}/deleteuser": "User.delete"
+    },
+
+    "names": {
+        "nameserver": "example.com",
+        "nameserver_ip": "192.168.0.1"
+    },
+
+    "zone_file": "/etc/bind/zones.conf",
+    "db_path": "/etc/bind/db/"
+}

@@ -13,7 +13,7 @@
             </div>
             <div class="menu">
                 <a class="button" href="/">DOMAINS</a> ::
-                <a class="button" href="/add">ADD DOMAIN</a> :: 
+                <a class="button" href="/aliases">MAIL REDIRECTIONS</a> :: 
                 <a class="button" href="/urls">URL TREE</a>  
             </div>
             <div class="content">

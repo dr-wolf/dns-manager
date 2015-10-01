@@ -2,44 +2,31 @@
     require_once(__DIR__.'/classes/controller.php');
     require_once(__DIR__.'/classes/db.php');
     require_once(__DIR__.'/classes/mysqli.php');
-    require_once(__DIR__.'/classes/cookie.php');
-
-    function autoload_controller($class_name)
-    {
-        $class_path = APP_PATH.'/actions/'.strtolower($class_name).'.php';
-        if(file_exists($class_path))
-            require_once($class_path);
-    }  
-
-    function autoload_model($class_name)
-    {
-        $class_path = APP_PATH.'/db/'.strtolower($class_name).'.php';
-        if(file_exists($class_path))
-            require_once($class_path);
-    }
-
-    function autoload_helper($class_name)
-    {
-        $class_path = APP_PATH.'/helpers/'.strtolower($class_name).'.php';
-        if(file_exists($class_path))
-            require_once($class_path);
-        else
-            throw new Exception('Class "'.$class_name.'" not found!');
-    }    
-
-    spl_autoload_register('autoload_controller');
-    spl_autoload_register('autoload_model');
-    spl_autoload_register('autoload_helper');
+    require_once(__DIR__.'/classes/cookie.php'); 
+    require_once(__DIR__.'/classes/session.php'); 
 
     /*
     * written by Taras "Dr.Wolf" Supyk <w@enigma-lab.org>    
-    * © ENIGMA Development Laboratory, 2014
+    * Â© ENIGMA Development Laboratory, 2014
     */
 
     final class Core 
     {
         static private $cookie = null;
-        static public $config = array();
+        static private $session = null;
+        static public $config = array(
+            'title' => 'Mosquito',
+            'layout' => 'layout',
+            'error' => 'error',
+            'debug' => true,
+            'default_language' => '',
+            'languages' => array(
+            ),
+            'includes' => array(
+                -1 => 'actions',
+                -2 => 'db'
+            ),
+        );
 
         static private $errors = array(
             300 => 'HTTP/1.1 300 Multiple Choices',
@@ -74,10 +61,45 @@
             504 => 'HTTP/1.1 504 Gateway Time-out'
         );   
 
+        static private function prepare_get($matches)
+        {
+            $keys = array_filter(array_keys($matches), function ($k){ return !is_int($k); }); 
+            return array_intersect_key($matches, array_flip($keys));
+        }
+
+        static private function autoload($class_name)
+        {
+            foreach(self::$config['includes'] as $dir){
+                $class_path = realpath(APP_PATH.'/'.$dir).'/'.strtolower($class_name).'.php'; 
+                if(file_exists($class_path)){
+                    require_once($class_path);
+                    return 0;
+                }
+            }    
+            throw new Exception('Class "'.$class_name.'" not found!');
+        }
+
+        static private function init_framework()
+        {
+            spl_autoload_register(array(get_called_class(), 'autoload'));
+            if(file_exists(APP_PATH.'config.json'))
+                self::$config = array_replace_recursive(self::$config, json_decode(file_get_contents(APP_PATH.'config.json'), true));   
+            else
+                throw new Exception('Configuration file does not exists!', 500);                 
+            if(self::$config['debug']){
+                ini_set('display_errors', 1);
+                error_reporting(E_ALL);  
+            } else
+                ini_set('display_errors', 0); 
+            if(isset(self::$config['db']))     
+                DB::init(self::$config['db']);
+        }
+
         static public function exception($exception){
             if(isset(self::$errors[$exception->getCode()]))
                 header(self::$errors[$exception->getCode()]);
-            die(Controller::render(self::$config['error'], array('exception' => $exception)));
+            ob_clean();
+            die(Controller::render(self::$config['error'], array('exception' => $exception), true));
         }
 
         static public function cookie()
@@ -87,48 +109,66 @@
             return self::$cookie;
         }
 
-        static public function run($config)
+        static public function session()
         {
-            self::$config = $config;
-            if(self::$config['debug']){
-                ini_set('display_errors', 1);
-                error_reporting(E_ALL);
-            }
+            if (self::$session == null)
+                self::$session = new Session();
+            return self::$session;
+        }        
+        
+        static public function run()
+        {
+            self::init_framework();   
             set_exception_handler(array(get_called_class(), 'exception'));       
             set_error_handler(function($errno, $errstr, $errfile, $errline){
                 throw new ErrorException($errstr, 0, $errno, $errfile, $errline); 
-            });       
-            DB::init(self::$config['db']);
-            $url = parse_url($_SERVER['REQUEST_URI']);
-            if(!isset($url['query']))
-                $url['query'] = '';
-            foreach(self::$config['routes'] as $pattern => $controller)
-                if($pattern == $url['path']){
+            });  
+
+            $url = parse_url($_SERVER['REQUEST_URI']); 
+           
+            if(count(self::$config['languages'])) {
+                if(preg_match('#^/('.implode('|', self::$config['languages']).')(/.*)?$#i', $url['path'], $matches)){
+                    Controller::$language = $matches[1];
+                    $url['path'] = substr($url['path'], strlen($matches[1]) + 1);
+                    if($url['path'] == '')
+                        $url['path'] = '/';
+                } else 
+                    Controller::$language = self::$config['default_language'];
+            } 
+            
+            Controller::$uri = $url['path'];
+            if(isset($url['query']))
+                Controller::$uri .= '?'.$url['query'];
+
+            foreach(self::$config['routes'] as $pattern => $controller){
+                $pattern = preg_replace_callback("#{([a-z]+[a-z0-9]*):([^}]*)}#i", function($m){
+                    return '(?P<'.$m[1].'>'.$m[2].')';            
+                    }, $pattern);
+                if(preg_match('#^'.$pattern.'$#i', $url['path'], $matches)){
                     list($class, $method) = explode('.', $controller);
                     if(method_exists($class, $method)){
-                        $class::before();
-                        $content = $class::$method();  
+                        $_REQUEST += self::prepare_get($matches);                       
+                        $class::init();
+                        return $class::$method();  
                     }  
-                    break;
                 }
-                if(!isset($content))
-                throw new Exception($url['path'].' is not found.', 404);
-            return Controller::render(self::$config['layout'], array('content' => $content));  
+            }
+            throw new Exception($url['path'].' is not found.', 404); 
         }
 
-        static public function cron($config, $class)
-        {
-            self::$config = $config;
-            DB::init(self::$config['db']);
+        static public function cron($class)
+        {            
+            self::init_framework();
             $opt = getopt('c:');
             if(isset($opt['c'])) 
                 $method = $opt['c'];
             else
                 $result = '[error]: method is not specified!'.PHP_EOL;
             $result = '[error]: method not found!'.PHP_EOL;
-            if(method_exists($class, $method))
-                $result = $class::$method();                      
-            return $result;   
+            if(method_exists($class, $method)){
+                $class::init();
+                return $class::$method();  
+            }                       
         }
 
 }

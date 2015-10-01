@@ -1,10 +1,10 @@
 <?php
     /*
     * written by Taras "Dr.Wolf" Supyk <w@enigma-lab.org>    
-    * © ENIGMA Development Laboratory, 2014
+    * ? ENIGMA Development Laboratory, 2014
     */
 
-    class Cookie
+    final class Cookie
     {
         const session = null;
         const day = 86400;
@@ -12,12 +12,12 @@
         const month = 2592000;
         const year = 31536000;
 
-        static public function exists($name)
+        public function exists($name)
         {
             return isset($_COOKIE[$name]);
         }
 
-        static public function get($name, $default = '')
+        public function get($name, $default = null)
         {
             if (isset($_COOKIE[$name]))
                 return $_COOKIE[$name];
@@ -25,33 +25,28 @@
                 return $default;
         }
 
-        static public function set($name, $value, $expiry = self::session, $path = '/', $domain = false)
+        public function set($name, $value, $expiry = self::session, $path = '/')
         {
             if (!headers_sent()) {
-                if ($domain === false)
-                    $domain = $_SERVER['HTTP_HOST'];
                 if (is_numeric($expiry))
                     $expiry += time();
                 else
                     $expiry = strtotime($expiry);
-                if (@setcookie($name, $value, $expiry, $path, $domain)) {
+                if (setcookie($name, $value, $expiry, $path)){ 
                     $_COOKIE[$name] = $value;
-                    return true;
+                    return true;    
                 }
             }
             return false;
         }
 
-        static public function delete($name, $path = '/', $domain = false, $remove_from_global = false)
+        public function delete($name)
         {
             if (!headers_sent()) {
-                if ($domain === false)
-                    $domain = $_SERVER['HTTP_HOST'];
-                if ($remove_from_global)
-                    unset($_COOKIE[$name]);
-                if (setcookie($name, '', time() - 3600, $path, $domain))
-                    return true;
+                unset($_COOKIE[$name]);
+                setcookie($name, null, -1);
+                return true;
             }
-            return true;
+            return false;
         }
 }

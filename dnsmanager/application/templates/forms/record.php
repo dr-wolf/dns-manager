@@ -1,5 +1,5 @@
 <div style="margin: 10px 0px">
-    <a class="button" href="/domain?id=<?=$record['domain_id']?>">GO BACK</a>    
+    <a class="button" href="/<?=$record['domain_id']?>">GO BACK</a>    
 </div>
 <form method="post" name="record">
     <div>

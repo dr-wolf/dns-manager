@@ -5,9 +5,9 @@
 
     "db": {
         "host": "localhost",
-        "user": "dnscontrol_user",
-        "password": "password",
-        "database": "dnscontrol_db"
+        "user": "root",
+        "password": "1111",
+        "database": "dnsmanager"
     },
     
     "routes": {
@@ -32,7 +32,7 @@
 
     "names": {
         "nameserver": "example.com",
-        "nameserver_ip": "192.168.0.1"
+        "nameserver_ip": "10.10.10.10"
     },
 
     "zone_file": "/etc/bind/zones.conf",

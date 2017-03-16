@@ -32,7 +32,7 @@
         public static function update($record)
         {
             $sql = 'update `records` set `name` = ?, `type` = ?, `target` = ? where `id` = ?';
-            if(self::$db->query($sql, self::prepare('name', 'type', 'target', 'id'))->affectedRows()) 
+            if(self::$db->query($sql, self::prepare($record, array('name', 'type', 'target', 'id')))->affectedRows()) 
                 DomainDB::modify($record['domain_id']);     
         }
 

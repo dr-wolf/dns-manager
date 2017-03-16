@@ -19,8 +19,8 @@
                 <ul style="font-family: monospace;">
                     <?foreach($exception->getTrace() as $line):?>
                         <?if(isset($line['file']) && isset($line['line'])):?>
-                        <li>at <?=$line['file']?>:<?=$line['line']?></li>
-                        <?endif?>
+                        	<li>at <?=$line['file']?>:<?=$line['line']?></li>
+                        	<?endif?>
                         <?endforeach?>
                 </ul>
             </div>

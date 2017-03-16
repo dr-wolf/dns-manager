@@ -1,0 +1,15 @@
+{
+    "debug": true,
+    
+    "db": {
+        "host": "localhost",
+        "user": "root",
+        "password": "1111",
+        "database": "db",
+        "encoding": "utf8"
+    },
+        
+    "routes": {
+        "/": "Site.index"
+    }
+}

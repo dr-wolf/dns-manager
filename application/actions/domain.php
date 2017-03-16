@@ -1,7 +1,7 @@
 <?php
     /*
     * written by Taras "Dr.Wolf" Supyk <w@enigma-lab.org>    
-    * © ENIGMA Development Laboratory, 2014
+    * Â© ENIGMA Development Laboratory, 2014
     */
 
     class Domain extends BaseController 

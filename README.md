@@ -10,4 +10,4 @@ Also web clieant stores list of e-mail accounts for every domain. This informati
 
 ## Installation
 
-Check [[/INSTALL]] for installation steps.
+Check [INSTALL](/INSTALL.md) for installation steps.

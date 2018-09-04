@@ -1,3 +1,7 @@
+# WARNING!
+
+This repo is no more maintained! Project has been moved to https://gitlab.com/dr-wolf/dns-manager 
+
 # dns-manager
 
 Web GUI for bind9 daemon, written on PHP.
